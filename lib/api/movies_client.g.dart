@@ -35,4 +35,23 @@ class _MoviesClient implements MoviesClient {
     final value = MovieBriefsResponse.fromJson(_result.data);
     return value;
   }
+
+  @override
+  Future<MovieDetails> loadMovieDetails(id) async {
+    ArgumentError.checkNotNull(id, 'id');
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    final _result = await _dio.request<Map<String, dynamic>>('3/movie/$id',
+        queryParameters: queryParameters,
+        options: RequestOptions(
+            method: 'GET',
+            headers: <String, dynamic>{},
+            extra: _extra,
+            baseUrl: baseUrl,
+            responseType: ResponseType.json),
+        data: _data);
+    final value = MovieDetails.fromJson(_result.data);
+    return value;
+  }
 }

@@ -1,3 +1,4 @@
+import 'package:movie_info_flutter/models/movie_details.dart';
 import 'package:movie_info_flutter/models/movie_briefs_response.dart';
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
@@ -31,4 +32,8 @@ abstract class MoviesClient {
   @GET("3/discover/movie?sort_by=popularity.desc")
   @DioResponseType(ResponseType.json)
   Future<MovieBriefsResponse> loadMoviesBriefs(@Query("page") int page);
+
+  @GET("3/movie/{movie_id}")
+  @DioResponseType(ResponseType.json)
+  Future<MovieDetails> loadMovieDetails(@Path("movie_id") int id);
 }
