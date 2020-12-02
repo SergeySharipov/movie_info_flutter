@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:movie_info_flutter/api/movies_client.dart';
@@ -40,72 +41,125 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
     });
   }
 
+  getDetailsBody() {
+    final textTheme = Theme.of(context).textTheme;
+    return Column(children: [
+      Padding(
+        padding: const EdgeInsets.all(4.0),
+        child: Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(6),
+          ),
+          child: Row(
+            children: [
+              if (_movieDetails.posterPath != null)
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: CachedNetworkImage(
+                    width: 100,
+                    imageUrl: 'https://image.tmdb.org/t/p/w342' +
+                        '${_movieDetails.posterPath}',
+                  ),
+                ),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        _movieDetails.title,
+                        style: textTheme.subtitle1,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        'Vote average: ${_movieDetails.voteAverage}',
+                        style: textTheme.bodyText2,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        'Release date: ${_movieDetails.releaseDate}',
+                        style: textTheme.bodyText2,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+      SizedBox(
+        height: 32,
+        child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            shrinkWrap: true,
+            itemCount: _movieGenres.length,
+            itemBuilder: (BuildContext context, int index) {
+              return Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                color: Colors.red,
+                child: Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: Text(_movieGenres[index],style: TextStyle(color: Colors.white),),
+                ),
+              );
+            }),
+      ),
+      Padding(
+        padding: const EdgeInsets.all(4.0),
+        child: Card(
+            child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child:
+                  Align(alignment: Alignment.centerLeft, child: Text('Overview')),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(_movieDetails.overview),
+            ),
+          ],
+        )),
+      ),
+    ]);
+  }
+
   @override
   Widget build(BuildContext context) {
     if (_movieDetails != null) {
       return Scaffold(
-        appBar: AppBar(
-          title: Text(_movieDetails.title),
-          centerTitle: true,
-        ),
-        body: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
-          child: Column(mainAxisSize: MainAxisSize.min, children: [
-            Card(
-              child: ListTile(
-                onTap: () {
-                  Navigator.pushNamed(context, '/movie_details', arguments: {
-                    'id': _movieDetails.id,
-                  });
-                },
-                leading: ClipRRect(
-                  borderRadius: BorderRadius.circular(8.0),
-                  child: Image.network(
-                    'https://image.tmdb.org/t/p/w342' +
-                        '${_movieDetails.posterPath}',
-                    height: 200.0,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                title: Text(_movieDetails.title),
-                subtitle: Text(_movieDetails.releaseDate),
-                trailing: Text('${_movieDetails.voteAverage}'),
-                isThreeLine: true,
+        body: CustomScrollView(
+          slivers: <Widget>[
+            SliverAppBar(
+              floating: false,
+              flexibleSpace: CachedNetworkImage(
+                fit: BoxFit.cover,
+                imageUrl: 'https://image.tmdb.org/t/p/w780' +
+                    '${_movieDetails.backdropPath}',
+              ),
+              pinned: true,
+              expandedHeight: 150,
+            ),
+            SliverList(
+              // Use a delegate to build items as they're scrolled on screen.
+              delegate: SliverChildBuilderDelegate(
+                // The builder function returns a ListTile with a title that
+                // displays the index of the current item.
+                (context, index) => getDetailsBody(),
+                // Builds 1000 ListTiles
+                childCount: 1,
               ),
             ),
-            SizedBox(
-              height: 38,
-              child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  shrinkWrap: true,
-                  itemCount: _movieGenres.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Padding(
-                      padding: const EdgeInsets.all(2.0),
-                      child: Card(
-                        child: Padding(
-                          padding: const EdgeInsets.all(4.0),
-                          child: Text(_movieGenres[index]),
-                        ),
-                      ),
-                    );
-                  }),
-            ),
-            Card(
-                child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Align(
-                      alignment: Alignment.centerLeft, child: Text('Overview')),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(_movieDetails.overview),
-                ),
-              ],
-            )),
-          ]),
+          ],
         ),
       );
     } else {
