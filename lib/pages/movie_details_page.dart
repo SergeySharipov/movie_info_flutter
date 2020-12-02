@@ -150,12 +150,8 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
               expandedHeight: 150,
             ),
             SliverList(
-              // Use a delegate to build items as they're scrolled on screen.
               delegate: SliverChildBuilderDelegate(
-                // The builder function returns a ListTile with a title that
-                // displays the index of the current item.
                 (context, index) => getDetailsBody(),
-                // Builds 1000 ListTiles
                 childCount: 1,
               ),
             ),

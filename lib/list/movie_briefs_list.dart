@@ -2,25 +2,27 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:movie_info_flutter/api/movies_client.dart';
-import 'package:movie_info_flutter/models/movie_brief.dart';
 import 'package:movie_info_flutter/list/movie_brief_list_item.dart';
+import 'package:movie_info_flutter/models/movie_brief.dart';
 
 class MovieBriefsListView extends StatefulWidget {
-  const MovieBriefsListView({
-    Key key,
-  }) : super(key: key);
+  final String query;
+
+  const MovieBriefsListView({Key key, this.query}) : super(key: key);
 
   @override
-  _MovieBriefsListViewState createState() =>
-      _MovieBriefsListViewState();
+  _MovieBriefsListViewState createState() => _MovieBriefsListViewState(query);
 }
 
 class _MovieBriefsListViewState extends State<MovieBriefsListView> {
+  final String query;
   final _apiClient = MoviesClient(Dio());
 
   final _pagingController = PagingController<int, MovieBrief>(
     firstPageKey: 1,
   );
+
+  _MovieBriefsListViewState(this.query);
 
   @override
   void initState() {
@@ -32,7 +34,12 @@ class _MovieBriefsListViewState extends State<MovieBriefsListView> {
 
   Future<void> _fetchPage(int pageKey) async {
     try {
-      final newPage = await _apiClient.loadMoviesBriefs(pageKey);
+      var newPage;
+      if (query == null) {
+        newPage = await _apiClient.loadMoviesBriefs(pageKey);
+      } else {
+        newPage = await _apiClient.searchMovieByName(pageKey, query);
+      }
 
       final isLastPage = newPage.totalPages == pageKey;
       final newItems = newPage.results;
