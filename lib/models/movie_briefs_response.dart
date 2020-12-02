@@ -20,7 +20,6 @@ class MovieBriefsResponse {
     if (results != null) {
       for (var result in results) {
         MovieBrief movieBrief = MovieBrief.fromJson(result);
-        print(movieBrief);
         movieBriefsList.add(movieBrief);
       }
     }

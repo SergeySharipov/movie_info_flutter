@@ -3,19 +3,19 @@ import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:movie_info_flutter/api/movies_client.dart';
 import 'package:movie_info_flutter/models/movie_brief.dart';
-import 'package:movie_info_flutter/list/movie_list_item.dart';
+import 'package:movie_info_flutter/list/movie_brief_list_item.dart';
 
-class PagedMovieBriefsListView extends StatefulWidget {
-  const PagedMovieBriefsListView({
+class MovieBriefsListView extends StatefulWidget {
+  const MovieBriefsListView({
     Key key,
   }) : super(key: key);
 
   @override
-  _PagedMovieBriefsListViewState createState() =>
-      _PagedMovieBriefsListViewState();
+  _MovieBriefsListViewState createState() =>
+      _MovieBriefsListViewState();
 }
 
-class _PagedMovieBriefsListViewState extends State<PagedMovieBriefsListView> {
+class _MovieBriefsListViewState extends State<MovieBriefsListView> {
   final _apiClient = MoviesClient(Dio());
 
   final _pagingController = PagingController<int, MovieBrief>(
@@ -62,7 +62,7 @@ class _PagedMovieBriefsListViewState extends State<PagedMovieBriefsListView> {
         child: PagedListView.separated(
           pagingController: _pagingController,
           builderDelegate: PagedChildBuilderDelegate<MovieBrief>(
-            itemBuilder: (context, _movieBrief, index) => MovieListItem(
+            itemBuilder: (context, _movieBrief, index) => MovieBriefsListItem(
               movieBrief: _movieBrief,
             ),
             firstPageErrorIndicatorBuilder: (context) => FlatButton.icon(

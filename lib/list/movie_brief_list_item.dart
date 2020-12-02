@@ -2,8 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:movie_info_flutter/models/movie_brief.dart';
 
-class MovieListItem extends StatelessWidget {
-  const MovieListItem({
+class MovieBriefsListItem extends StatelessWidget {
+  const MovieBriefsListItem({
     @required this.movieBrief,
     Key key,
   })  : assert(movieBrief != null),

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:movie_info_flutter/list/movies_list.dart';
-
-const page = 1;
+import 'package:movie_info_flutter/list/movie_briefs_list.dart';
 
 class MoviesListPage extends StatefulWidget {
   MoviesListPage({Key key}) : super(key: key);
@@ -24,7 +22,7 @@ class _MoviesListPageState extends State<MoviesListPage> {
         title: Text('Popular Movies'),
         centerTitle: true,
       ),
-      body: PagedMovieBriefsListView(),
+      body: MovieBriefsListView(),
     );
   }
 }
