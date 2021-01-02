@@ -4,6 +4,7 @@ import 'package:movie_info_flutter/pages/movies_list_page.dart';
 
 void main() => runApp(MaterialApp(
         title: 'Movie Info',
+        debugShowCheckedModeBanner: false,
         theme: ThemeData(
           visualDensity: VisualDensity.adaptivePlatformDensity,
           primaryColor: Colors.red,
